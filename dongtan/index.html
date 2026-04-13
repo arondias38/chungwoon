@@ -2,18 +2,28 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#ecf2f8">
   <title>입학테스트 예약</title>
   <style>
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
     * { box-sizing: border-box; } 
-    html, body { overscroll-behavior-y: none; touch-action: pan-y; }
+    html, body { 
+      overscroll-behavior-y: none; 
+      touch-action: pan-y; 
+      /* 추가: 화면 높이를 모바일 화면 끝까지 꽉 채우기 */
+      min-height: 100dvh; 
+    }
     body { 
       font-family: 'Pretendard', 'Malgun Gothic', sans-serif; 
-      padding: 15px 15px 80px 15px; max-width: 500px; margin: 0 auto; 
+      /* 수정: 상단 패딩을 아이폰 노치(안전 영역) 길이에 맞춰 자동 조절 */
+      padding: max(20px, env(safe-area-inset-top)) 15px 80px 15px; 
+      max-width: 500px; margin: 0 auto; 
       line-height: 1.6; overflow-x: hidden; 
       background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%); 
+      /* 추가: 스크롤 시 배경이 위로 딸려 올라가지 않고 고정되도록 설정 */
+      background-attachment: fixed;
       position: relative;
     }
     
@@ -113,7 +123,7 @@
     #submitBtn:active { transform: translateY(1px); box-shadow: 0 3px 15px rgba(0, 123, 255, 0.2); }
     #submitBtn:disabled { background: rgba(204, 204, 204, 0.8); border: 1px solid #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
     #submitBtn:disabled::before { display: none; }
-  </style>
+</style>
 </head>
 <body>
   
