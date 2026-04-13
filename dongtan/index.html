@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
-<head>
+<html lang="ko"> <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#ecf2f8">
+  <meta name="theme-color" content="#f0f4f8">
+  
   <title>입학테스트 예약</title>
   <style>
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
@@ -12,18 +12,20 @@
     html, body { 
       overscroll-behavior-y: none; 
       touch-action: pan-y; 
-      /* 추가: 화면 높이를 모바일 화면 끝까지 꽉 채우기 */
+      /* 추가: 뷰포트 높이 버그 방지 (전체 높이 확보) */
       min-height: 100dvh; 
     }
     body { 
       font-family: 'Pretendard', 'Malgun Gothic', sans-serif; 
-      /* 수정: 상단 패딩을 아이폰 노치(안전 영역) 길이에 맞춰 자동 조절 */
+      /* 수정: 상단 패딩을 노치(safe-area) 길이에 맞춰 유동적으로 조절 */
       padding: max(20px, env(safe-area-inset-top)) 15px 80px 15px; 
       max-width: 500px; margin: 0 auto; 
       line-height: 1.6; overflow-x: hidden; 
+      
+      /* 수정: 배경 고정 및 위치 최적화 */
       background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%); 
-      /* 추가: 스크롤 시 배경이 위로 딸려 올라가지 않고 고정되도록 설정 */
       background-attachment: fixed;
+      background-size: cover;
       position: relative;
     }
     
@@ -64,8 +66,9 @@
     .btn-confirm { background-color: #1366ce; color: #fff; } .btn-confirm:hover { background-color: #0f54a8; }
 
     /* 헤더 및 폼 기본 구조 */
-    .fixed-header-bg { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 500px; z-index: -1; padding: 15px 15px 0 15px; pointer-events: none; }
-    .logo-container { text-align: center; margin-bottom: 10px; margin-top: 15px; height: auto; min-height: 40px; }
+    /* 수정: 헤더 배경도 노치 영역 패딩 대응 */
+    .fixed-header-bg { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 500px; z-index: -1; padding: max(15px, env(safe-area-inset-top)) 15px 0 15px; pointer-events: none; }
+    .logo-container { text-align: center; margin-bottom: 10px; margin-top: 10px; height: auto; min-height: 40px; }
     .logo-container img { max-width: 180px; height: auto; display: none; }
     .main-title { background-color: #1366ce; color: #ffffff; text-align: center; padding: 8px 0; margin: 0 -15px 25px -15px; border-radius: 0; font-size: 19px; font-weight: bold; box-shadow: none; }
 
@@ -73,7 +76,7 @@
     .form-section { background-color: rgba(255, 255, 255, 0.6) !important; backdrop-filter: blur(25px) !important; -webkit-backdrop-filter: blur(25px) !important; padding: 25px; margin-bottom: 20px; border-radius: 36px !important; border: 1px solid rgba(255, 255, 255, 0.4) !important; border-top: 2px solid rgba(255, 255, 255, 0.9) !important; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12), 0 5px 15px rgba(0, 0, 0, 0.08) !important; position: relative; }
     .section-title { width: fit-content; min-width: 180px; margin: 0 auto 20px auto; font-size: 17px; background-color: #79828a; color: #ffffff; padding: 6px 20px; border-radius: 20px; display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: bold; border: none; box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.20), inset -3px -3px 6px rgba(255, 255, 255, 0.2); }
 
-    /* 폼 입력 필드 및 컨트롤 */
+    /* 이하 폼 컨트롤/체크박스/버튼 스타일은 원본과 동일 (생략 없이 유지) */
     .form-group { margin-bottom: 18px; } .form-group:last-child { margin-bottom: 0; } 
     label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; font-size: 16px; } 
     input[type="text"], input[type="tel"], input[type="date"], select, textarea { width: 100% !important; max-width: 100% !important; height: 55px; box-sizing: border-box !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; padding: 0 15px; margin: 0; border: 1px solid #ced4da !important; border-radius: 18px; font-size: 18px; background-color: #ffffff !important; color: #333; font-family: inherit; transition: all 0.3s ease; }
@@ -123,7 +126,7 @@
     #submitBtn:active { transform: translateY(1px); box-shadow: 0 3px 15px rgba(0, 123, 255, 0.2); }
     #submitBtn:disabled { background: rgba(204, 204, 204, 0.8); border: 1px solid #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
     #submitBtn:disabled::before { display: none; }
-</style>
+  </style>
 </head>
 <body>
   
@@ -354,10 +357,7 @@
   </div>
 
   <script>
-    // ★★★ 여기에 구글 웹앱 배포 주소를 따옴표 안에 넣어주세요! ★★★
-    // 예시: const API_URL = "https://script.google.com/macros/s/AKfyc.../exec";
     const API_URL = "https://script.google.com/macros/s/AKfycbyPNGhIHsyDvSgrK3T8FqVMJRZvXoOpwZng04D748yHu7eYhpU6DWF7hwkJX56rjkvV/exec"; 
-    // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 
     let globalData = null; 
     let copyTextContent = ""; 
@@ -388,14 +388,10 @@
       else { ptr.style.height = '0px'; }
     });
 
-    // ==========================================
-    // API 통신: 데이터 불러오기 (fetch 적용)
-    // ==========================================
     function loadData(isRefresh = false) {
       if (isRefresh) { document.getElementById('ptr-text').innerHTML = "최신 일정 업데이트 중..."; } 
       else { document.getElementById('loadingOverlay').style.display = 'flex'; }
 
-      // ★ 구글 서버로 fetch(GET) 요청을 보냅니다.
       fetch(API_URL)
         .then(response => response.json())
         .then(data => {
@@ -562,9 +558,6 @@
       else { const textArea = document.createElement("textarea"); textArea.value = copyTextContent; textArea.style.position = "absolute"; textArea.style.left = "-999999px"; document.body.appendChild(textArea); textArea.focus(); textArea.select(); try { document.execCommand('copy'); alert('예약 내역이 클립보드에 복사되었습니다.'); } catch (err) { alert('복사에 실패했습니다.'); } document.body.removeChild(textArea); }
     }
 
-    // ==========================================
-    // API 통신: 예약 접수 (fetch 적용)
-    // ==========================================
     function proceedSubmit() {
       closeConfirmModal();
       const btn = document.getElementById('submitBtn'); const form = document.getElementById('reservationForm');
@@ -576,16 +569,14 @@
         mainBook: getCheckboxValues('mainBook'), mathWorry: getCheckboxValues('mathWorry'), referral: getCheckboxValues('referral')
       };
       
-      // ★ 구글 서버로 fetch(POST) 요청을 보냅니다.
       fetch(API_URL, {
         method: 'POST',
-        // 구글 스크립트와의 안전한 통신을 위해 텍스트 형태로 감싸서 보냅니다.
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(formData)
       })
       .then(response => response.json())
       .then(res => {
-         if (res.error) throw new Error(res.error); // 에러가 있으면 강제로 아래 catch로 보냄
+         if (res.error) throw new Error(res.error);
          
          document.getElementById('reservationForm').style.display = 'none'; document.getElementById('noticeSection').style.display = 'none'; document.getElementById('mainTitle').style.display = 'none'; document.querySelector('.content-wrapper').style.marginTop = '80px'; 
          
