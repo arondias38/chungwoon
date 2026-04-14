@@ -399,6 +399,7 @@
           }
           document.getElementById('academyNameSpan1').innerText = data.academyInfo.name;
           document.title = data.academyInfo.name + ' 입학테스트 예약';
+          document.getElementById('mainTitle').innerText = data.academyInfo.name + ' 입학테스트 예약';
 
           if (data.isReservationActive === false) {
             document.getElementById('disabledOverlay').style.display = 'flex'; 
