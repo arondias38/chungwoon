@@ -386,7 +386,7 @@
       else { document.getElementById('loadingOverlay').style.display = 'flex'; }
 
       // ★ 구글 서버로 fetch(GET) 요청을 보냅니다.
-      fetch(API_URL)
+      fetch(API_URL + "?t=" + new Date().getTime(), { cache: 'no-store' })
         .then(response => response.json())
         .then(data => {
           globalData = data; 
