@@ -412,14 +412,12 @@
 
           if (isRefresh) {
              dateInput.value = ''; displayInput.value = '';
-             // ★ 스크립트에서도 원장님 정답 코드로 강제 주입
              timeSelect.innerHTML = '<option value="" style="display:none;" selected disabled>날짜를 먼저 선택하세요</option>';
              timeSelect.disabled = true;
              document.getElementById('dateLabel').innerHTML = '· 예약 날짜'; document.getElementById('timeLabel').innerHTML = '· 예약 시간';
           }
 
           const courseSelect = document.getElementById('testCourse');
-          // ★ 스크립트에서도 원장님 정답 코드로 강제 주입
           courseSelect.innerHTML = '<option value="" style="display:none;" selected disabled>테스트 과정을 선택하세요</option>';
           data.courses.forEach(function(course) { const opt = document.createElement('option'); opt.value = course; opt.text = course; courseSelect.appendChild(opt); });
 
@@ -433,7 +431,7 @@
                setTimeout(() => { document.getElementById('ptr-container').style.height = '0px'; }, 1500);
            } else {
                alert("데이터 로딩 실패: 새로고침 해주세요.");
-               document.getElementById('testCourse').innerHTML = '<option value="">데이터 로드 실패</option>';
+               document.getElementById('testCourse').innerHTML = '<option value="" style="display:none;">데이터 로드 실패</option>';
                document.getElementById('loadingOverlay').style.display = 'none';
            }
         });
@@ -449,6 +447,22 @@
 
       document.getElementById('reservationForm').addEventListener('keydown', function(event) { if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA' && event.target.type !== 'text') { event.preventDefault(); } });
       document.getElementById('reserveTime').addEventListener('change', function() { const timeLabel = document.getElementById('timeLabel'); if (this.value) { timeLabel.innerHTML = '· 예약 시간 <span style="color:#28a745; margin-left:5px;">✔</span>'; } else { timeLabel.innerHTML = '· 예약 시간'; } });
+      
+      // ★ 모바일 사파리 고집 꺾기: 화면을 터치하는 순간 빈 안내 문구는 허공으로 삭제해버립니다.
+      document.querySelectorAll('select').forEach(function(selectEl) {
+        selectEl.addEventListener('touchstart', function() {
+          if (this.options.length > 0 && this.options[0].value === "") {
+            this.options[0].remove();
+          }
+        }, { passive: true });
+        
+        selectEl.addEventListener('mousedown', function() {
+          if (this.options.length > 0 && this.options[0].value === "") {
+            this.options[0].remove();
+          }
+        });
+      });
+
       loadData(); 
     });
 
@@ -488,22 +502,21 @@
       const [year, month, day] = dateVal.split('-').map(Number); const dObj = new Date(year, month - 1, day); const dayOfWeek = dObj.getDay(); const dayNames = ['일', '월', '화', '수', '목', '금', '토']; const currentDayName = dayNames[dayOfWeek];
       timeSelect.innerHTML = '';
 
-      if(globalData.disabledDates.includes(dateVal)) { timeSelect.innerHTML = '<option value="">해당 날짜는 휴무일입니다.</option>'; timeSelect.disabled = true; return; }
+      if(globalData.disabledDates.includes(dateVal)) { timeSelect.innerHTML = '<option value="" style="display:none;" selected disabled>해당 날짜는 휴무일입니다.</option>'; timeSelect.disabled = true; return; }
 
       const daySchedule = globalData.schedule[dayOfWeek];
-      if(!daySchedule || daySchedule.isClosed) { timeSelect.innerHTML = '<option value="">해당 요일은 휴무입니다.</option>'; timeSelect.disabled = true; return; }
+      if(!daySchedule || daySchedule.isClosed) { timeSelect.innerHTML = '<option value="" style="display:none;" selected disabled>해당 요일은 휴무입니다.</option>'; timeSelect.disabled = true; return; }
 
       let [sH, sM] = daySchedule.start.split(':').map(Number); let [eH, eM] = daySchedule.end.split(':').map(Number);
       let allSlots = [];
       for(let m = sH * 60 + sM; m <= eH * 60 + eM; m += daySchedule.interval) { let h = Math.floor(m / 60); let mn = m % 60; allSlots.push((h < 10 ? '0' + h : h) + ':' + (mn < 10 ? '0' + mn : mn)); }
 
-      if(allSlots.length === 0) { timeSelect.innerHTML = '<option value="">예약 가능한 시간이 없습니다.</option>'; timeSelect.disabled = true; return; }
+      if(allSlots.length === 0) { timeSelect.innerHTML = '<option value="" style="display:none;" selected disabled>예약 가능한 시간이 없습니다.</option>'; timeSelect.disabled = true; return; }
 
-      // ★ 스크립트에서 option 만들 때도 원장님 정답 코드로 강제 주입
       const defaultOpt = document.createElement('option'); 
       defaultOpt.value = ""; 
       defaultOpt.text = "시간을 선택해주세요"; 
-      defaultOpt.style.display = "none"; // <-- 아이폰 멱살 잡는 핵심 마법
+      defaultOpt.style.display = "none";
       defaultOpt.disabled = true; 
       defaultOpt.selected = true; 
       timeSelect.appendChild(defaultOpt);
