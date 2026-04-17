@@ -223,7 +223,7 @@
         <div class="form-group">
           <label id="timeLabel">· 예약 시간</label>
           <select id="reserveTime" name="reserveTime" required disabled oninvalid="this.setCustomValidity('예약 시간을 선택해 주세요.')" oninput="this.setCustomValidity('')">
-            <option value="" disabled hidden selected>날짜를 먼저 선택하세요</option>
+            <option value="" style="display:none;" selected disabled>날짜를 먼저 선택하세요</option>
           </select>
         </div>
       </div>
@@ -246,7 +246,7 @@
         <div class="form-group">
           <label>· 학년</label>
           <select name="grade" required onchange="this.style.color='#333';" oninvalid="this.setCustomValidity('학생의 학년을 선택해 주세요.')" oninput="this.setCustomValidity('')">
-            <option value="" disabled hidden selected>학년을 선택하세요</option>
+            <option value="" style="display:none;" selected disabled>학년을 선택하세요</option>
             <option value="초4">초4</option><option value="초5">초5</option><option value="초6">초6</option>
             <option value="중1">중1</option><option value="중2">중2</option><option value="중3">중3</option>
           </select>
@@ -260,7 +260,7 @@
         <div class="form-group" style="margin-top: 25px;">
           <label>· 테스트 과정 선택 (현 시점 마무리 된 수학 과정)</label>
           <select id="testCourse" name="testCourse" required oninvalid="this.setCustomValidity('테스트 과정을 선택해 주세요.')" oninput="this.setCustomValidity('')">
-            <option value="" disabled hidden selected>과정을 불러오는 중...</option>
+            <option value="" style="display:none;" selected disabled>과정을 불러오는 중...</option>
           </select>
         </div>
 
@@ -339,7 +339,7 @@
   </div>
 
   <script>
-    // ★★★ 여기에 구글 웹앱 배포 주소를 따옴표 안에 넣어주세요! ★★★
+    // ⚠️ [중요] ⚠️ 영통 지점 깃허브에 올리실 때는 반드시 아래 API 주소를 영통 전용 주소로 바꿔주세요!
     const API_URL = "https://script.google.com/macros/s/AKfycbyDnEoyOw5G4jrruHi50DeJEAAZj8hizqpzWSGee-BM9Jv31D7zJmormvzz3b3odDc/exec"; 
     // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 
@@ -412,15 +412,15 @@
 
           if (isRefresh) {
              dateInput.value = ''; displayInput.value = '';
-             // ★ 완벽 차단 로직 추가
-             timeSelect.innerHTML = '<option value="" disabled hidden selected>날짜를 먼저 선택하세요</option>';
+             // ★ 스크립트에서도 원장님 정답 코드로 강제 주입
+             timeSelect.innerHTML = '<option value="" style="display:none;" selected disabled>날짜를 먼저 선택하세요</option>';
              timeSelect.disabled = true;
              document.getElementById('dateLabel').innerHTML = '· 예약 날짜'; document.getElementById('timeLabel').innerHTML = '· 예약 시간';
           }
 
           const courseSelect = document.getElementById('testCourse');
-          // ★ 완벽 차단 로직 추가
-          courseSelect.innerHTML = '<option value="" disabled hidden selected>테스트 과정을 선택하세요</option>';
+          // ★ 스크립트에서도 원장님 정답 코드로 강제 주입
+          courseSelect.innerHTML = '<option value="" style="display:none;" selected disabled>테스트 과정을 선택하세요</option>';
           data.courses.forEach(function(course) { const opt = document.createElement('option'); opt.value = course; opt.text = course; courseSelect.appendChild(opt); });
 
           if (isRefresh) { document.getElementById('ptr-container').style.height = '0px'; } 
@@ -475,11 +475,15 @@
       const timeSelect = document.getElementById('reserveTime'); const dateLabel = document.getElementById('dateLabel'); const timeLabel = document.getElementById('timeLabel');
       
       if(dateVal) { dateLabel.innerHTML = '· 예약 날짜 <span style="color:#28a745; margin-left:5px;">✔</span>'; timeLabel.innerHTML = '· 예약 시간'; displayInput.value = getFormattedDateWithDay(dateVal); } 
-      else { dateLabel.innerHTML = '· 예약 날짜'; displayInput.value = ''; timeSelect.innerHTML = '<option value="" disabled hidden selected>날짜를 먼저 선택하세요</option>'; timeSelect.disabled = true; return; }
+      else { 
+        dateLabel.innerHTML = '· 예약 날짜'; displayInput.value = ''; 
+        timeSelect.innerHTML = '<option value="" style="display:none;" selected disabled>날짜를 먼저 선택하세요</option>'; 
+        timeSelect.disabled = true; return; 
+      }
 
       if(!globalData) { alert("아직 데이터를 불러오는 중입니다. 잠시 후 다시 선택해 주세요."); dateInput.value = ''; displayInput.value = ''; return; }
-      if(dateVal < dateInput.getAttribute('min')) { alert('과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해 주세요.'); dateInput.value = ''; displayInput.value = ''; timeSelect.innerHTML = '<option value="" disabled hidden selected>날짜를 먼저 선택하세요</option>'; timeSelect.disabled = true; dateLabel.innerHTML = '· 예약 날짜'; return; }
-      if(dateVal > dateInput.getAttribute('max')) { alert('오늘 기준으로 2개월 이내의 일정만 예약하실 수 있습니다.'); dateInput.value = ''; displayInput.value = ''; timeSelect.innerHTML = '<option value="" disabled hidden selected>날짜를 먼저 선택하세요</option>'; timeSelect.disabled = true; dateLabel.innerHTML = '· 예약 날짜'; return; }
+      if(dateVal < dateInput.getAttribute('min')) { alert('과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해 주세요.'); dateInput.value = ''; displayInput.value = ''; timeSelect.innerHTML = '<option value="" style="display:none;" selected disabled>날짜를 먼저 선택하세요</option>'; timeSelect.disabled = true; dateLabel.innerHTML = '· 예약 날짜'; return; }
+      if(dateVal > dateInput.getAttribute('max')) { alert('오늘 기준으로 2개월 이내의 일정만 예약하실 수 있습니다.'); dateInput.value = ''; displayInput.value = ''; timeSelect.innerHTML = '<option value="" style="display:none;" selected disabled>날짜를 먼저 선택하세요</option>'; timeSelect.disabled = true; dateLabel.innerHTML = '· 예약 날짜'; return; }
 
       const [year, month, day] = dateVal.split('-').map(Number); const dObj = new Date(year, month - 1, day); const dayOfWeek = dObj.getDay(); const dayNames = ['일', '월', '화', '수', '목', '금', '토']; const currentDayName = dayNames[dayOfWeek];
       timeSelect.innerHTML = '';
@@ -495,12 +499,12 @@
 
       if(allSlots.length === 0) { timeSelect.innerHTML = '<option value="">예약 가능한 시간이 없습니다.</option>'; timeSelect.disabled = true; return; }
 
-      // ★ 완벽 차단 로직 추가: disabled hidden selected로 목록에서 숨기기
+      // ★ 스크립트에서 option 만들 때도 원장님 정답 코드로 강제 주입
       const defaultOpt = document.createElement('option'); 
       defaultOpt.value = ""; 
       defaultOpt.text = "시간을 선택해주세요"; 
+      defaultOpt.style.display = "none"; // <-- 아이폰 멱살 잡는 핵심 마법
       defaultOpt.disabled = true; 
-      defaultOpt.hidden = true; 
       defaultOpt.selected = true; 
       timeSelect.appendChild(defaultOpt);
       
