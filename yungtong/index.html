@@ -223,7 +223,7 @@
         <div class="form-group">
           <label id="timeLabel">· 예약 시간</label>
           <select id="reserveTime" name="reserveTime" required disabled oninvalid="this.setCustomValidity('예약 시간을 선택해 주세요.')" oninput="this.setCustomValidity('')">
-            <option value="" style="display:none;" selected disabled>날짜를 먼저 선택하세요</option>
+            <option value="">날짜를 먼저 선택하세요</option>
           </select>
         </div>
       </div>
@@ -246,7 +246,7 @@
         <div class="form-group">
           <label>· 학년</label>
           <select name="grade" required onchange="this.style.color='#333';" oninvalid="this.setCustomValidity('학생의 학년을 선택해 주세요.')" oninput="this.setCustomValidity('')">
-            <option value="" style="display:none;" selected disabled>학년을 선택하세요</option>
+            <option value="" style="display: none;">학년을 선택하세요</option>
             <option value="초4">초4</option><option value="초5">초5</option><option value="초6">초6</option>
             <option value="중1">중1</option><option value="중2">중2</option><option value="중3">중3</option>
           </select>
@@ -260,7 +260,7 @@
         <div class="form-group" style="margin-top: 25px;">
           <label>· 테스트 과정 선택 (현 시점 마무리 된 수학 과정)</label>
           <select id="testCourse" name="testCourse" required oninvalid="this.setCustomValidity('테스트 과정을 선택해 주세요.')" oninput="this.setCustomValidity('')">
-            <option value="" style="display:none;" selected disabled>과정을 불러오는 중...</option>
+            <option value="">과정을 불러오는 중...</option>
           </select>
         </div>
 
@@ -339,7 +339,7 @@
   </div>
 
   <script>
-    // ⚠️ [중요] ⚠️ 영통 지점 깃허브에 올리실 때는 반드시 아래 API 주소를 영통 전용 주소로 바꿔주세요!
+    // ★★★ 여기에 구글 웹앱 배포 주소를 따옴표 안에 넣어주세요! ★★★
     const API_URL = "https://script.google.com/macros/s/AKfycbyDnEoyOw5G4jrruHi50DeJEAAZj8hizqpzWSGee-BM9Jv31D7zJmormvzz3b3odDc/exec"; 
     // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 
@@ -412,13 +412,13 @@
 
           if (isRefresh) {
              dateInput.value = ''; displayInput.value = '';
-             timeSelect.innerHTML = '<option value="" style="display:none;" selected disabled>날짜를 먼저 선택하세요</option>';
+             timeSelect.innerHTML = '<option value="" style="display:none;">날짜를 먼저 선택하세요</option>';
              timeSelect.disabled = true;
              document.getElementById('dateLabel').innerHTML = '· 예약 날짜'; document.getElementById('timeLabel').innerHTML = '· 예약 시간';
           }
 
           const courseSelect = document.getElementById('testCourse');
-          courseSelect.innerHTML = '<option value="" style="display:none;" selected disabled>테스트 과정을 선택하세요</option>';
+          courseSelect.innerHTML = '<option value="" style="display: none;">테스트 과정을 선택하세요</option>';
           data.courses.forEach(function(course) { const opt = document.createElement('option'); opt.value = course; opt.text = course; courseSelect.appendChild(opt); });
 
           if (isRefresh) { document.getElementById('ptr-container').style.height = '0px'; } 
@@ -431,7 +431,7 @@
                setTimeout(() => { document.getElementById('ptr-container').style.height = '0px'; }, 1500);
            } else {
                alert("데이터 로딩 실패: 새로고침 해주세요.");
-               document.getElementById('testCourse').innerHTML = '<option value="" style="display:none;">데이터 로드 실패</option>';
+               document.getElementById('testCourse').innerHTML = '<option value="">데이터 로드 실패</option>';
                document.getElementById('loadingOverlay').style.display = 'none';
            }
         });
@@ -447,22 +447,6 @@
 
       document.getElementById('reservationForm').addEventListener('keydown', function(event) { if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA' && event.target.type !== 'text') { event.preventDefault(); } });
       document.getElementById('reserveTime').addEventListener('change', function() { const timeLabel = document.getElementById('timeLabel'); if (this.value) { timeLabel.innerHTML = '· 예약 시간 <span style="color:#28a745; margin-left:5px;">✔</span>'; } else { timeLabel.innerHTML = '· 예약 시간'; } });
-      
-      // ★ 모바일 사파리 고집 꺾기: 화면을 터치하는 순간 빈 안내 문구는 허공으로 삭제해버립니다.
-      document.querySelectorAll('select').forEach(function(selectEl) {
-        selectEl.addEventListener('touchstart', function() {
-          if (this.options.length > 0 && this.options[0].value === "") {
-            this.options[0].remove();
-          }
-        }, { passive: true });
-        
-        selectEl.addEventListener('mousedown', function() {
-          if (this.options.length > 0 && this.options[0].value === "") {
-            this.options[0].remove();
-          }
-        });
-      });
-
       loadData(); 
     });
 
@@ -489,38 +473,27 @@
       const timeSelect = document.getElementById('reserveTime'); const dateLabel = document.getElementById('dateLabel'); const timeLabel = document.getElementById('timeLabel');
       
       if(dateVal) { dateLabel.innerHTML = '· 예약 날짜 <span style="color:#28a745; margin-left:5px;">✔</span>'; timeLabel.innerHTML = '· 예약 시간'; displayInput.value = getFormattedDateWithDay(dateVal); } 
-      else { 
-        dateLabel.innerHTML = '· 예약 날짜'; displayInput.value = ''; 
-        timeSelect.innerHTML = '<option value="" style="display:none;" selected disabled>날짜를 먼저 선택하세요</option>'; 
-        timeSelect.disabled = true; return; 
-      }
+      else { dateLabel.innerHTML = '· 예약 날짜'; displayInput.value = ''; timeSelect.innerHTML = '<option value="" style="display:none;">날짜를 먼저 선택하세요</option>'; timeSelect.disabled = true; return; }
 
       if(!globalData) { alert("아직 데이터를 불러오는 중입니다. 잠시 후 다시 선택해 주세요."); dateInput.value = ''; displayInput.value = ''; return; }
-      if(dateVal < dateInput.getAttribute('min')) { alert('과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해 주세요.'); dateInput.value = ''; displayInput.value = ''; timeSelect.innerHTML = '<option value="" style="display:none;" selected disabled>날짜를 먼저 선택하세요</option>'; timeSelect.disabled = true; dateLabel.innerHTML = '· 예약 날짜'; return; }
-      if(dateVal > dateInput.getAttribute('max')) { alert('오늘 기준으로 2개월 이내의 일정만 예약하실 수 있습니다.'); dateInput.value = ''; displayInput.value = ''; timeSelect.innerHTML = '<option value="" style="display:none;" selected disabled>날짜를 먼저 선택하세요</option>'; timeSelect.disabled = true; dateLabel.innerHTML = '· 예약 날짜'; return; }
+      if(dateVal < dateInput.getAttribute('min')) { alert('과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해 주세요.'); dateInput.value = ''; displayInput.value = ''; timeSelect.innerHTML = '<option value="" style="display:none;">날짜를 먼저 선택하세요</option>'; timeSelect.disabled = true; dateLabel.innerHTML = '· 예약 날짜'; return; }
+      if(dateVal > dateInput.getAttribute('max')) { alert('오늘 기준으로 2개월 이내의 일정만 예약하실 수 있습니다.'); dateInput.value = ''; displayInput.value = ''; timeSelect.innerHTML = '<option value="" style="display:none;">날짜를 먼저 선택하세요</option>'; timeSelect.disabled = true; dateLabel.innerHTML = '· 예약 날짜'; return; }
 
       const [year, month, day] = dateVal.split('-').map(Number); const dObj = new Date(year, month - 1, day); const dayOfWeek = dObj.getDay(); const dayNames = ['일', '월', '화', '수', '목', '금', '토']; const currentDayName = dayNames[dayOfWeek];
       timeSelect.innerHTML = '';
 
-      if(globalData.disabledDates.includes(dateVal)) { timeSelect.innerHTML = '<option value="" style="display:none;" selected disabled>해당 날짜는 휴무일입니다.</option>'; timeSelect.disabled = true; return; }
+      if(globalData.disabledDates.includes(dateVal)) { timeSelect.innerHTML = '<option value="">해당 날짜는 휴무일입니다.</option>'; timeSelect.disabled = true; return; }
 
       const daySchedule = globalData.schedule[dayOfWeek];
-      if(!daySchedule || daySchedule.isClosed) { timeSelect.innerHTML = '<option value="" style="display:none;" selected disabled>해당 요일은 휴무입니다.</option>'; timeSelect.disabled = true; return; }
+      if(!daySchedule || daySchedule.isClosed) { timeSelect.innerHTML = '<option value="">해당 요일은 휴무입니다.</option>'; timeSelect.disabled = true; return; }
 
       let [sH, sM] = daySchedule.start.split(':').map(Number); let [eH, eM] = daySchedule.end.split(':').map(Number);
       let allSlots = [];
       for(let m = sH * 60 + sM; m <= eH * 60 + eM; m += daySchedule.interval) { let h = Math.floor(m / 60); let mn = m % 60; allSlots.push((h < 10 ? '0' + h : h) + ':' + (mn < 10 ? '0' + mn : mn)); }
 
-      if(allSlots.length === 0) { timeSelect.innerHTML = '<option value="" style="display:none;" selected disabled>예약 가능한 시간이 없습니다.</option>'; timeSelect.disabled = true; return; }
+      if(allSlots.length === 0) { timeSelect.innerHTML = '<option value="">예약 가능한 시간이 없습니다.</option>'; timeSelect.disabled = true; return; }
 
-      const defaultOpt = document.createElement('option'); 
-      defaultOpt.value = ""; 
-      defaultOpt.text = "시간을 선택해주세요"; 
-      defaultOpt.style.display = "none";
-      defaultOpt.disabled = true; 
-      defaultOpt.selected = true; 
-      timeSelect.appendChild(defaultOpt);
-      
+      const defaultOpt = document.createElement('option'); defaultOpt.value = ""; defaultOpt.text = "시간을 선택해주세요"; defaultOpt.style.display = "none"; timeSelect.appendChild(defaultOpt);
       const bookedToday = globalData.booked[dateVal] || []; const unavailToday = globalData.unavailableRanges.filter(r => r.day === currentDayName);
 
       const todayForTimeCheck = new Date();
@@ -625,6 +598,7 @@
       })
       .catch(err => {
          console.error(err);
+         // ★ 백엔드에서 튕겨냈을 때의 에러 처리 분기
          if (err.message && err.message.includes("ALREADY_BOOKED")) { 
            alert("죄송합니다.\n선택하신 시간은 방금 전 예약이 마감되었습니다.\n확인을 누르시면 최신 일정으로 업데이트됩니다.\n다른 일정을 선택해 주시기 바랍니다."); 
            btn.disabled = false; btn.innerText = '예약 제출하기'; 
