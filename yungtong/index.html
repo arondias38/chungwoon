@@ -23,7 +23,6 @@
     body::before { top: -100px; left: -100px; width: 400px; height: 400px; background: radial-gradient(circle at 30% 30%, #a2d2ff 0%, rgba(162, 210, 255, 0) 100%); }
     body::after { bottom: -150px; right: -150px; width: 500px; height: 500px; background: radial-gradient(circle at 70% 70%, #4facfe 0%, rgba(79, 172, 254, 0) 100%); }
 
-    /* 모달 및 오버레이 */
     #disabledOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.3); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 10000; justify-content: center; align-items: center; padding: 20px; }
     .disabled-modal { background-color: rgba(255, 255, 255, 0.95); width: 100%; max-width: 380px; border-radius: 36px; padding: 35px 25px; border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); text-align: center; }
     .disabled-icon { width: 50px; height: 50px; margin: 0 auto 15px auto; background-color: #f8d7da; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #dc3545; }
@@ -53,7 +52,6 @@
     .btn-cancel { background-color: #e1e4e8; color: #495057; } .btn-cancel:hover { background-color: #d3d6d9; }
     .btn-confirm { background-color: #1366ce; color: #fff; } .btn-confirm:hover { background-color: #0f54a8; }
 
-    /* 헤더 및 폼 기본 구조 */
     .fixed-header-bg { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 500px; z-index: -1; padding: 15px 15px 0 15px; pointer-events: none; }
     .logo-container { text-align: center; margin-bottom: 10px; margin-top: 15px; height: auto; min-height: 40px; }
     .logo-container img { max-width: 180px; height: auto; display: none; }
@@ -63,7 +61,6 @@
     .form-section { background-color: rgba(255, 255, 255, 0.6) !important; backdrop-filter: blur(25px) !important; -webkit-backdrop-filter: blur(25px) !important; padding: 25px; margin-bottom: 20px; border-radius: 36px !important; border: 1px solid rgba(255, 255, 255, 0.4) !important; border-top: 2px solid rgba(255, 255, 255, 0.9) !important; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12), 0 5px 15px rgba(0, 0, 0, 0.08) !important; position: relative; }
     .section-title { width: fit-content; min-width: 180px; margin: 0 auto 20px auto; font-size: 17px; background-color: #79828a; color: #ffffff; padding: 6px 20px; border-radius: 20px; display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: bold; border: none; box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.20), inset -3px -3px 6px rgba(255, 255, 255, 0.2); }
 
-    /* 폼 입력 필드 및 컨트롤 */
     .form-group { margin-bottom: 18px; } .form-group:last-child { margin-bottom: 0; } 
     label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; font-size: 16px; } 
     input[type="text"], input[type="tel"], input[type="date"], select, textarea { width: 100% !important; max-width: 100% !important; height: 55px; box-sizing: border-box !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; padding: 0 15px; margin: 0; border: 1px solid #ced4da !important; border-radius: 18px; font-size: 18px; background-color: #ffffff !important; color: #333; font-family: inherit; transition: all 0.3s ease; }
@@ -95,12 +92,10 @@
     .privacy-consent input[type="checkbox"] { width: 20px !important; height: 20px !important; margin: 0 8px 0 0; cursor: pointer; accent-color: #1366ce; flex-shrink: 0; }
     .consent-second-line { margin-top: 5px; font-size: 15px; }
 
-    /* 당겨서 새로고침 */
     #ptr-container { height: 0px; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: -10px; margin-bottom: 10px; will-change: height; transform: translateZ(0); backface-visibility: hidden; }
     .ptr-spinner { width: 26px; height: 26px; border: 3px solid #e1e4e8; border-top: 3px solid #1366ce; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 6px; }
     #ptr-text { font-size: 14px; color: #777; font-weight: bold; }
 
-    /* 결과 페이지 및 버튼 */
     .success-checkmark { width: 48px; height: 48px; margin: 0 auto 15px auto; background-color: #03C75A; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
     .success-checkmark svg { width: 30px; height: 30px; color: #ffffff; }
     .action-btn-group { display: flex; justify-content: center; align-items: center; margin-top: 18px; }
@@ -345,7 +340,6 @@
 
   <script>
     // ★★★ 여기에 구글 웹앱 배포 주소를 따옴표 안에 넣어주세요! ★★★
-    // 예시: const API_URL = "https://script.google.com/macros/s/AKfyc.../exec";
     const API_URL = "https://script.google.com/macros/s/AKfycbyDnEoyOw5G4jrruHi50DeJEAAZj8hizqpzWSGee-BM9Jv31D7zJmormvzz3b3odDc/exec"; 
     // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 
@@ -378,15 +372,11 @@
       else { ptr.style.height = '0px'; }
     });
 
-    // ==========================================
-    // API 통신: 데이터 불러오기 (fetch 적용)
-    // ==========================================
     function loadData(isRefresh = false) {
       if (isRefresh) { document.getElementById('ptr-text').innerHTML = "최신 일정 업데이트 중..."; } 
       else { document.getElementById('loadingOverlay').style.display = 'flex'; }
 
-      // ★ 구글 서버로 fetch(GET) 요청을 보냅니다.
-      fetch(API_URL)
+      fetch(API_URL + "?t=" + new Date().getTime(), { cache: 'no-store' })
         .then(response => response.json())
         .then(data => {
           globalData = data; 
@@ -506,12 +496,25 @@
       const defaultOpt = document.createElement('option'); defaultOpt.value = ""; defaultOpt.text = "시간을 선택해주세요"; defaultOpt.style.display = "none"; timeSelect.appendChild(defaultOpt);
       const bookedToday = globalData.booked[dateVal] || []; const unavailToday = globalData.unavailableRanges.filter(r => r.day === currentDayName);
 
+      const todayForTimeCheck = new Date();
+      const todayStrForTimeCheck = todayForTimeCheck.getFullYear() + '-' + String(todayForTimeCheck.getMonth() + 1).padStart(2, '0') + '-' + String(todayForTimeCheck.getDate()).padStart(2, '0');
+      const currentTotalMinutes = todayForTimeCheck.getHours() * 60 + todayForTimeCheck.getMinutes();
+
       allSlots.forEach(slot => {
         const opt = document.createElement('option'); opt.value = slot; let [tH, tM] = slot.split(':').map(Number); let tTotal = tH * 60 + tM;
         let isBooked = bookedToday.includes(slot);
         let isUnavail = unavailToday.some(r => { let [usH, usM] = r.start.split(':').map(Number); let [ueH, ueM] = r.end.split(':').map(Number); return tTotal >= (usH * 60 + usM) && tTotal <= (ueH * 60 + ueM); });
 
-        if(isBooked) { opt.text = slot + " (마감)"; opt.disabled = true; } else if(isUnavail) { opt.text = slot + " (불가)"; opt.disabled = true; } else { opt.text = slot; }
+        let isPastTime = false;
+        if (dateVal === todayStrForTimeCheck && tTotal <= currentTotalMinutes) {
+            isPastTime = true;
+        }
+
+        if(isBooked) { opt.text = slot + " (마감)"; opt.disabled = true; } 
+        else if(isUnavail) { opt.text = slot + " (불가)"; opt.disabled = true; } 
+        else if(isPastTime) { opt.text = slot + " (마감)"; opt.disabled = true; } 
+        else { opt.text = slot; }
+        
         timeSelect.appendChild(opt);
       });
       timeSelect.disabled = false;
@@ -567,16 +570,14 @@
         mainBook: getCheckboxValues('mainBook'), mathWorry: getCheckboxValues('mathWorry'), referral: getCheckboxValues('referral')
       };
       
-      // ★ 구글 서버로 fetch(POST) 요청을 보냅니다.
       fetch(API_URL, {
         method: 'POST',
-        // 구글 스크립트와의 안전한 통신을 위해 텍스트 형태로 감싸서 보냅니다.
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(formData)
       })
       .then(response => response.json())
       .then(res => {
-         if (res.error) throw new Error(res.error); // 에러가 있으면 강제로 아래 catch로 보냄
+         if (res.error) throw new Error(res.error); 
          
          document.getElementById('reservationForm').style.display = 'none'; document.getElementById('noticeSection').style.display = 'none'; document.getElementById('mainTitle').style.display = 'none'; document.querySelector('.content-wrapper').style.marginTop = '80px'; 
          
@@ -597,12 +598,19 @@
       })
       .catch(err => {
          console.error(err);
+         // ★ 백엔드에서 튕겨냈을 때의 에러 처리 분기
          if (err.message && err.message.includes("ALREADY_BOOKED")) { 
            alert("죄송합니다.\n선택하신 시간은 방금 전 예약이 마감되었습니다.\n확인을 누르시면 최신 일정으로 업데이트됩니다.\n다른 일정을 선택해 주시기 바랍니다."); 
            btn.disabled = false; btn.innerText = '예약 제출하기'; 
            loadData(true); 
            document.getElementById('scheduleSection').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
          } 
+         else if (err.message && err.message.includes("PAST_TIME")) { 
+           alert("죄송합니다.\n선택하신 시간은 이미 지난 시간이라 예약할 수 없습니다.\n확인을 누르시면 최신 일정으로 업데이트됩니다."); 
+           btn.disabled = false; btn.innerText = '예약 제출하기'; 
+           loadData(true); 
+           document.getElementById('scheduleSection').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+         }
          else { 
            alert('오류 발생: 다시 시도해주세요.'); 
            btn.disabled = false; btn.innerText = '예약 제출하기'; 
