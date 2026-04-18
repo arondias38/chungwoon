@@ -598,7 +598,6 @@
       })
       .catch(err => {
          console.error(err);
-         // ★ 백엔드에서 튕겨냈을 때의 에러 처리 분기
          if (err.message && err.message.includes("ALREADY_BOOKED")) { 
            alert("죄송합니다.\n선택하신 시간은 방금 전 예약이 마감되었습니다.\n확인을 누르시면 최신 일정으로 업데이트됩니다.\n다른 일정을 선택해 주시기 바랍니다."); 
            btn.disabled = false; btn.innerText = '예약 제출하기'; 
@@ -607,6 +606,12 @@
          } 
          else if (err.message && err.message.includes("PAST_TIME")) { 
            alert("죄송합니다.\n선택하신 시간은 이미 지난 시간이라 예약할 수 없습니다.\n확인을 누르시면 최신 일정으로 업데이트됩니다."); 
+           btn.disabled = false; btn.innerText = '예약 제출하기'; 
+           loadData(true); 
+           document.getElementById('scheduleSection').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+         }
+         else if (err.message && err.message.includes("PAST_DATE")) { 
+           alert("죄송합니다.\n과거 날짜로는 예약할 수 없습니다.\n확인을 누르시면 최신 일정으로 업데이트됩니다."); 
            btn.disabled = false; btn.innerText = '예약 제출하기'; 
            loadData(true); 
            document.getElementById('scheduleSection').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
