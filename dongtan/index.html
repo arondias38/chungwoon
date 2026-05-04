@@ -337,7 +337,11 @@
   </div>
 
   <script>
+    // =========================================================================
+    // ★★★ [수정 필수] 지점별 구글 웹앱(API) 배포 주소를 아래에 입력하세요 ★★★
+    // =========================================================================
     const API_URL = "https://script.google.com/macros/s/AKfycbyPNGhIHsyDvSgrK3T8FqVMJRZvXoOpwZng04D748yHu7eYhpU6DWF7hwkJX56rjkvV/exec"; 
+    // =========================================================================
 
     let globalData = null; 
     let copyTextContent = ""; 
@@ -583,6 +587,11 @@
            document.getElementById('scheduleSection').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
          } else if (err.message && err.message.includes("PAST_DATE")) { 
            alert("죄송합니다.\n과거 날짜로는 예약할 수 없습니다.\n확인을 누르시면 최신 일정으로 업데이트됩니다."); 
+           btn.disabled = false; btn.innerText = '예약 제출하기'; loadData(true); 
+           document.getElementById('scheduleSection').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+         // ★ 추가된 부분: 기본설정 실시간 변경 감지 방어막
+         } else if (err.message && err.message.includes("UNAVAILABLE_SETTING")) { 
+           alert("죄송합니다.\n학원 일정이 변경되어 선택하신 시간에는 예약이 불가합니다.\n확인을 누르시면 최신 일정으로 업데이트됩니다.\n다른 일정을 선택해 주시기 바랍니다."); 
            btn.disabled = false; btn.innerText = '예약 제출하기'; loadData(true); 
            document.getElementById('scheduleSection').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
          } else { 
