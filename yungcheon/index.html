@@ -491,7 +491,9 @@
       for(let m = sH * 60 + sM; m <= eH * 60 + eM; m += daySchedule.interval) { let h = Math.floor(m / 60); let mn = m % 60; allSlots.push((h < 10 ? '0' + h : h) + ':' + (mn < 10 ? '0' + mn : mn)); }
       if(allSlots.length === 0) { timeSelect.innerHTML = '<option value="">예약 가능한 시간이 없습니다.</option>'; timeSelect.disabled = true; return; }
       const defaultOpt = document.createElement('option'); defaultOpt.value = ""; defaultOpt.text = "시간을 선택해주세요"; defaultOpt.style.display = "none"; timeSelect.appendChild(defaultOpt);
-      const bookedToday = globalData.booked[dateVal] || []; const unavailToday = globalData.unavailableRanges.filter(r => r.day === currentDayName);
+      const bookedToday = globalData.booked[dateVal] || []; 
+      // ★ 변경된 로직: 해당 날짜의 '요일(currentDayName)' 또는 '지정된 날짜(dateVal)'와 일치하는 불가 시간이 있는지 둘 다 검사!
+      const unavailToday = globalData.unavailableRanges.filter(r => r.day === currentDayName || r.day === dateVal);
       const todayForTimeCheck = new Date();
       const todayStrForTimeCheck = todayForTimeCheck.getFullYear() + '-' + String(todayForTimeCheck.getMonth() + 1).padStart(2, '0') + '-' + String(todayForTimeCheck.getDate()).padStart(2, '0');
       const currentTotalMinutes = todayForTimeCheck.getHours() * 60 + todayForTimeCheck.getMinutes();
