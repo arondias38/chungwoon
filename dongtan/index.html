@@ -338,7 +338,7 @@
 
   <script>
     // =========================================================================
-    // ★★★ [수정 필수] 지점별 구글 웹앱(API) 배포 주소를 아래에 입력하세요 ★★★
+    // ★★★ [수정 필수] 영통 지점 웹앱(API) 배포 주소를 아래에 입력하세요 ★★★
     // =========================================================================
     const API_URL = "https://script.google.com/macros/s/AKfycbyPNGhIHsyDvSgrK3T8FqVMJRZvXoOpwZng04D748yHu7eYhpU6DWF7hwkJX56rjkvV/exec"; 
     // =========================================================================
@@ -402,23 +402,25 @@
             document.getElementById('noticeSection').style.display = 'block';
           }
 
-          // ★ 학년 목록 동적 생성 (기존 하드코딩 옵션 대체)
           const gradeSelect = document.querySelector('select[name="grade"]');
           gradeSelect.innerHTML = '<option value="" style="display: none;">학년을 선택하세요</option>';
-          data.grades.forEach(function(grade) {
-            const opt = document.createElement('option');
-            opt.value = grade; opt.text = grade;
-            gradeSelect.appendChild(opt);
-          });
+          if(data.grades) {
+             data.grades.forEach(function(grade) {
+                const opt = document.createElement('option');
+                opt.value = grade; opt.text = grade;
+                gradeSelect.appendChild(opt);
+             });
+          }
 
-          // ★ 테스트 과정 목록 동적 생성
           const courseSelect = document.getElementById('testCourse');
           courseSelect.innerHTML = '<option value="" style="display: none;">테스트 과정을 선택하세요</option>';
-          data.courses.forEach(function(course) {
-            const opt = document.createElement('option');
-            opt.value = course; opt.text = course;
-            courseSelect.appendChild(opt);
-          });
+          if(data.courses) {
+             data.courses.forEach(function(course) {
+                const opt = document.createElement('option');
+                opt.value = course; opt.text = course;
+                courseSelect.appendChild(opt);
+             });
+          }
 
           const dateInput = document.getElementById('reserveDate');
           const displayInput = document.getElementById('reserveDateDisplay');
@@ -496,7 +498,6 @@
       if(allSlots.length === 0) { timeSelect.innerHTML = '<option value="">예약 가능한 시간이 없습니다.</option>'; timeSelect.disabled = true; return; }
       const defaultOpt = document.createElement('option'); defaultOpt.value = ""; defaultOpt.text = "시간을 선택해주세요"; defaultOpt.style.display = "none"; timeSelect.appendChild(defaultOpt);
       const bookedToday = globalData.booked[dateVal] || []; 
-      // ★ 변경된 로직: 해당 날짜의 '요일(currentDayName)' 또는 '지정된 날짜(dateVal)'와 일치하는 불가 시간이 있는지 둘 다 검사!
       const unavailToday = globalData.unavailableRanges.filter(r => r.day === currentDayName || r.day === dateVal);
       const todayForTimeCheck = new Date();
       const todayStrForTimeCheck = todayForTimeCheck.getFullYear() + '-' + String(todayForTimeCheck.getMonth() + 1).padStart(2, '0') + '-' + String(todayForTimeCheck.getDate()).padStart(2, '0');
@@ -555,6 +556,7 @@
         school: form.school.value, grade: form.grade.value, phone: form.phone.value, testCourse: form.testCourse.value, 
         mainBook: getCheckboxValues('mainBook'), mathWorry: getCheckboxValues('mathWorry'), referral: getCheckboxValues('referral')
       };
+      
       fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -578,9 +580,9 @@
       .catch(err => {
          console.error(err);
          
-         // ★ UX 개선: 에러 확인 즉시 스피너 띄우고 입력값 날려버리는 공통 함수
+         // ★ 완벽하게 복구 및 수정된 스피너 로직
          const resetAndLoad = () => {
-             document.getElementById('loadingOverlay').style.display = 'flex'; // 스피너 즉시 온!
+             document.getElementById('loadingOverlay').style.display = 'flex'; // 전체 화면 로딩 켬
              document.getElementById('reserveDate').value = ''; 
              document.getElementById('reserveDateDisplay').value = '';
              document.getElementById('reserveTime').innerHTML = '<option value="" style="display:none;">날짜를 먼저 선택하세요</option>';
@@ -589,8 +591,9 @@
              document.getElementById('timeLabel').innerHTML = '· 예약 시간';
              btn.disabled = false; btn.innerText = '예약 제출하기'; 
              
-             loadData(true); // 최신 데이터 요청
              document.getElementById('scheduleSection').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+             
+             loadData(); // true(당겨서 새로고침용 옵션)를 빼서 정상적으로 로딩창을 끄도록 수정!
          };
 
          if (err.message && err.message.includes("ALREADY_BOOKED")) { 
