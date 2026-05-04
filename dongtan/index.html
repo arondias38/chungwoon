@@ -550,7 +550,16 @@
     function proceedSubmit() {
       closeConfirmModal();
       const btn = document.getElementById('submitBtn'); const form = document.getElementById('reservationForm');
-      btn.disabled = true; btn.innerText = '제출 중...';
+      
+      // ★ 버튼 비활성화 및 점(...) 애니메이션 시작
+      btn.disabled = true; 
+      let dotCount = 0;
+      btn.innerText = '예약 제출 중';
+      const loadingInterval = setInterval(() => {
+        dotCount = (dotCount + 1) % 4; // 0, 1, 2, 3 무한 반복
+        btn.innerText = '예약 제출 중' + '.'.repeat(dotCount);
+      }, 400); // 0.4초 간격 설정
+
       const formData = {
         reserveDate: document.getElementById('reserveDate').value, reserveTime: form.reserveTime.value, studentName: form.studentName.value, 
         school: form.school.value, grade: form.grade.value, phone: form.phone.value, testCourse: form.testCourse.value, 
@@ -564,6 +573,8 @@
       })
       .then(response => response.json())
       .then(res => {
+         clearInterval(loadingInterval); // ★ 성공 시 애니메이션 타이머 끄기
+
          if (res.error) throw new Error(res.error); 
          document.getElementById('reservationForm').style.display = 'none'; document.getElementById('noticeSection').style.display = 'none'; document.getElementById('mainTitle').style.display = 'none'; document.querySelector('.content-wrapper').style.marginTop = '80px'; 
          document.getElementById('confirmName').innerText = res.name;
@@ -579,21 +590,21 @@
       })
       .catch(err => {
          console.error(err);
+         clearInterval(loadingInterval); // ★ 에러 발생 시에도 애니메이션 타이머 끄기
          
-         // ★ 완벽하게 복구 및 수정된 스피너 로직
          const resetAndLoad = () => {
-             document.getElementById('loadingOverlay').style.display = 'flex'; // 전체 화면 로딩 켬
+             document.getElementById('loadingOverlay').style.display = 'flex'; 
              document.getElementById('reserveDate').value = ''; 
              document.getElementById('reserveDateDisplay').value = '';
              document.getElementById('reserveTime').innerHTML = '<option value="" style="display:none;">날짜를 먼저 선택하세요</option>';
              document.getElementById('reserveTime').disabled = true;
              document.getElementById('dateLabel').innerHTML = '· 예약 날짜'; 
              document.getElementById('timeLabel').innerHTML = '· 예약 시간';
-             btn.disabled = false; btn.innerText = '예약 제출하기'; 
+             
+             btn.disabled = false; btn.innerText = '예약 제출하기'; // 텍스트 원상복구
              
              document.getElementById('scheduleSection').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
-             
-             loadData(); // true(당겨서 새로고침용 옵션)를 빼서 정상적으로 로딩창을 끄도록 수정!
+             loadData(); 
          };
 
          if (err.message && err.message.includes("ALREADY_BOOKED")) { 
