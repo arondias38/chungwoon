@@ -551,13 +551,14 @@
       closeConfirmModal();
       const btn = document.getElementById('submitBtn'); const form = document.getElementById('reservationForm');
       
-      // ★ 버튼 비활성화 및 점(...) 애니메이션 시작
+      // ★ 버튼 비활성화 및 점(...) 애니메이션 시작 (흔들림 방지 적용)
       btn.disabled = true; 
       let dotCount = 0;
-      btn.innerText = '예약 제출 중';
+      // 점이 들어갈 24px 짜리 고정 공간을 미리 만들어 둡니다.
+      btn.innerHTML = '예약 제출 중<span style="display:inline-block; width:24px; text-align:left;"></span>';
       const loadingInterval = setInterval(() => {
         dotCount = (dotCount + 1) % 4; // 0, 1, 2, 3 무한 반복
-        btn.innerText = '예약 제출 중' + '.'.repeat(dotCount);
+        btn.innerHTML = '예약 제출 중<span style="display:inline-block; width:24px; text-align:left;">' + '.'.repeat(dotCount) + '</span>';
       }, 400); // 0.4초 간격 설정
 
       const formData = {
