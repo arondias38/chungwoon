@@ -577,25 +577,37 @@
       })
       .catch(err => {
          console.error(err);
+         
+         // ★ UX 개선: 에러 확인 즉시 스피너 띄우고 입력값 날려버리는 공통 함수
+         const resetAndLoad = () => {
+             document.getElementById('loadingOverlay').style.display = 'flex'; // 스피너 즉시 온!
+             document.getElementById('reserveDate').value = ''; 
+             document.getElementById('reserveDateDisplay').value = '';
+             document.getElementById('reserveTime').innerHTML = '<option value="" style="display:none;">날짜를 먼저 선택하세요</option>';
+             document.getElementById('reserveTime').disabled = true;
+             document.getElementById('dateLabel').innerHTML = '· 예약 날짜'; 
+             document.getElementById('timeLabel').innerHTML = '· 예약 시간';
+             btn.disabled = false; btn.innerText = '예약 제출하기'; 
+             
+             loadData(true); // 최신 데이터 요청
+             document.getElementById('scheduleSection').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+         };
+
          if (err.message && err.message.includes("ALREADY_BOOKED")) { 
            alert("죄송합니다.\n선택하신 시간은 방금 전 예약이 마감되었습니다.\n확인을 누르시면 최신 일정으로 업데이트됩니다."); 
-           btn.disabled = false; btn.innerText = '예약 제출하기'; loadData(true); 
-           document.getElementById('scheduleSection').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+           resetAndLoad();
          } else if (err.message && err.message.includes("PAST_TIME")) { 
            alert("죄송합니다.\n선택하신 시간은 이미 지난 시간이라 예약할 수 없습니다.\n확인을 누르시면 최신 일정으로 업데이트됩니다."); 
-           btn.disabled = false; btn.innerText = '예약 제출하기'; loadData(true); 
-           document.getElementById('scheduleSection').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+           resetAndLoad();
          } else if (err.message && err.message.includes("PAST_DATE")) { 
            alert("죄송합니다.\n과거 날짜로는 예약할 수 없습니다.\n확인을 누르시면 최신 일정으로 업데이트됩니다."); 
-           btn.disabled = false; btn.innerText = '예약 제출하기'; loadData(true); 
-           document.getElementById('scheduleSection').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
-         // ★ 추가된 부분: 기본설정 실시간 변경 감지 방어막
+           resetAndLoad();
          } else if (err.message && err.message.includes("UNAVAILABLE_SETTING")) { 
            alert("죄송합니다.\n학원 일정이 변경되어 선택하신 시간에는 예약이 불가합니다.\n확인을 누르시면 최신 일정으로 업데이트됩니다.\n다른 일정을 선택해 주시기 바랍니다."); 
-           btn.disabled = false; btn.innerText = '예약 제출하기'; loadData(true); 
-           document.getElementById('scheduleSection').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+           resetAndLoad();
          } else { 
-           alert('오류 발생: 다시 시도해주세요.'); btn.disabled = false; btn.innerText = '예약 제출하기'; 
+           alert('오류 발생: 다시 시도해주세요.'); 
+           btn.disabled = false; btn.innerText = '예약 제출하기'; 
          }
       });
     }
