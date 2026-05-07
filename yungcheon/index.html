@@ -581,12 +581,18 @@
          document.getElementById('confirmName').innerText = res.name;
          const formattedResDate = getFormattedDateWithDay(res.date);
          document.getElementById('confirmDate').innerText = formattedResDate; document.getElementById('confirmTime').innerText = res.time;
-         const addrVal = globalData.academyInfo.address || '정보 없음'; const phoneVal = globalData.academyInfo.phone || '정보 없음';
-         document.getElementById('confirmAddress').innerText = addrVal; document.getElementById('confirmPhone').innerText = phoneVal;
+         const addrVal = globalData.academyInfo.address || '-'; 
+         const phoneVal = globalData.academyInfo.phone || '-';
+         
+         document.getElementById('confirmAddress').innerText = addrVal; 
+         document.getElementById('confirmPhone').innerText = phoneVal;
+         
          let mapLinkText = globalData.academyInfo.mapLink ? `\n\n${globalData.academyInfo.mapLink}` : "";
          copyTextContent = `[${globalData.academyInfo.name}]\n${res.name} 학생 입학테스트 예약 일정\n\n· 예약 일자: ${formattedResDate}\n· 예약 시간: ${res.time}\n· 오시는 길: ${addrVal}\n· 문의 전화: ${phoneVal}${mapLinkText}`;
+         
          const phoneLinkEl = document.getElementById('confirmPhoneLink');
-         if(phoneVal !== '정보 없음') phoneLinkEl.href = 'tel:' + phoneVal; else phoneLinkEl.removeAttribute('href');
+         if(phoneVal !== '-') phoneLinkEl.href = 'tel:' + phoneVal; 
+         else phoneLinkEl.removeAttribute('href');
          document.getElementById('confirmationPage').style.display = 'block'; window.scrollTo(0, 0); 
       })
       .catch(err => {
